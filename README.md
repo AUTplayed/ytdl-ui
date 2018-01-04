@@ -13,6 +13,8 @@ put your api key in a file called .env in the root of this project like this:
 apiKey=<yourkey>
 ```
 if you don't have one yet, you can get one for free at https://console.developers.google.com
+or
+[here](https://developers.google.com/youtube/v3/getting-started) is step by step tutorial to get your own youtube v3 api key by google itself.  
 
 ### How to start
 
