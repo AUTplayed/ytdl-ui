@@ -3,27 +3,31 @@ require('dotenv').config();
 var baseurl = "https://www.googleapis.com/youtube/v3/";
 var key = process.env.apiKey;
 
+if (!key) {
+    console.log("please provide your youtube api key");
+    process.exit();
+}
 var https = require("https");
 
 module.exports.checkPlaylist = checkPlaylist;
 
-function checkPlaylist(url, pagetoken, callback, finished){
+function checkPlaylist(url, pagetoken, callback, finished) {
     var id = filterId(url, "list");
     var buildurl = baseurl + "playlistItems?part=snippet&maxResults=50&playlistId=" + id + "&key=" + key;
-    if(pagetoken) {
-        buildurl += "&pageToken="+pagetoken;
+    if (pagetoken) {
+        buildurl += "&pageToken=" + pagetoken;
     }
     getBody(buildurl, function (res) {
-        for(var i = 0; i < res.items.length; i++){
+        for (var i = 0; i < res.items.length; i++) {
             var item = {};
             item.title = res.items[i].snippet.title;
             item.id = res.items[i].snippet.resourceId.videoId;
             item.thumbnail = res.items[i].snippet.thumbnails.default.url;
             callback(item);
         }
-        if(res.nextPageToken) {
+        if (res.nextPageToken) {
             checkPlaylist(url, res.nextPageToken, callback, finished);
-        }else {
+        } else {
             finished();
         }
     });
