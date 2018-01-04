@@ -1,5 +1,7 @@
 ## This is the ui version of [youtube-schedule](https://github.com/AUTplayed/youtube-schedule)
 
+![img](https://i.imgur.com/2XznDD3.png)
+
 ### Prerequisites
 
 - nodejs
