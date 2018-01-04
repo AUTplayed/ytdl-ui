@@ -26,3 +26,5 @@ To start the program, run
 ```
 node index.js
 ```
+
+The browser should open the webpage automatically. If it doesn't, open "http://127.0.0.1:8080" manually.

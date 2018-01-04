@@ -11,7 +11,7 @@ var curdownload = [];
 var path = require("path");
 var pj = path.join;
 
-app.use(express.static(path.join(__dirname,"public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 __dirname = process.cwd();
 const downloadpath = pj(pj(__dirname), "dl");
@@ -78,8 +78,8 @@ function update(item) {
     });
 }
 
-app.listen(8080,()=>{
-    opn("http://localhost:8080");
+app.listen(8080, () => {
+    opn("http://127.0.0.1:8080");
 });
 
 const videourl = "https://www.youtube.com/watch?v=";
@@ -89,18 +89,18 @@ function download(videos) {
     multDownload(5);
 }
 
-function multDownload(count){
-    for(var i = 0; i < count; i++){
+function multDownload(count) {
+    for (var i = 0; i < count; i++) {
         downloadWrap();
     }
 }
 
-function downloadWrap(){
+function downloadWrap() {
     var id = dlstack.shift();
-    singleDownload(id,downloadWrap);
+    singleDownload(id, downloadWrap);
 }
 
-function singleDownload(id,done) {
+function singleDownload(id, done) {
     var name = san(curdownload[id].title);
     var event = ytdl(videourl + id);
     var lastpercentage = 0;
@@ -116,7 +116,7 @@ function singleDownload(id,done) {
         update({ id: id, status: "Downloading" });
     });
     event.on("finish", () => {
-        console.log("downloaded",name+".mp4");
+        console.log("downloaded", name + ".mp4");
         update({ id: id, status: "Converting", progresstype: "indeterminate" });
         extractMp3(id, name, done);
     });
@@ -125,13 +125,13 @@ function singleDownload(id,done) {
     });
 }
 function extractMp3(id, name, done) {
-    execffmpeg(`ffmpeg -i "${pj(temppath, name)}.mp4" -vn -ar 44100 -ac 2 -ab 192k -f mp3 "${pj(temppath,name)}.mp3"`,()=>{
-        console.log("converted", name+".mp3");
-        fs.unlink(pj(temppath,name)+".mp4",()=>{
-            console.log("deleted", name+".mp4");
+    execffmpeg(`ffmpeg -i "${pj(temppath, name)}.mp4" -vn -ar 44100 -ac 2 -ab 192k -f mp3 "${pj(temppath, name)}.mp3"`, () => {
+        console.log("converted", name + ".mp3");
+        fs.unlink(pj(temppath, name) + ".mp4", () => {
+            console.log("deleted", name + ".mp4");
         });
-        fs.rename(pj(temppath,name)+".mp3",pj(downloadpath,name)+".mp3",(err)=>{
-            if(err)console.log(err);
+        fs.rename(pj(temppath, name) + ".mp3", pj(downloadpath, name) + ".mp3", (err) => {
+            if (err) console.log(err);
             update({ id: id, status: "Done", progresstype: "determinate" });
             prevdownloaded.push(id);
             savePrev();
@@ -140,15 +140,15 @@ function extractMp3(id, name, done) {
     });
 }
 
-function execffmpeg(command,done){
-    exec(command,(error,stdout,stderr)=>{
-        if(error){
-            console.log(error,stderr);
+function execffmpeg(command, done) {
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.log(error, stderr);
         }
         done();
     });
 }
 
-function savePrev(){
-    fs.writeFileSync("downloads",JSON.stringify(prevdownloaded,null,2));
+function savePrev() {
+    fs.writeFileSync("downloads", JSON.stringify(prevdownloaded, null, 2));
 }
