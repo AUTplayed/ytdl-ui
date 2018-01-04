@@ -12,7 +12,7 @@ put your api key in a file called .env in the root of this project like this:
 ```
 apiKey=<yourkey>
 ```
-
+if you don't have one yet, you can get one for free at https://console.developers.google.com
 
 ### How to start
 
