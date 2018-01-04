@@ -7,7 +7,6 @@ var ytdl = require("ytdl-core");
 require('express-ws')(app);
 var clients = [];
 var prevdownloaded = [];
-var ffmpeg = require("ffmpeg");
 var curdownload = [];
 var path = require("path");
 var pj = path.join;
